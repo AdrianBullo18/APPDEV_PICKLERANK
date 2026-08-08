@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pickleball Ranking</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont/tabler-icons.min.css" />
+</head>
+<body>
+  <section id="landing-hero" class="landing-hero" aria-labelledby="landing-title">
+    <header class="hero-nav">
+      <a class="hero-brand" href="#landing-hero" aria-label="PickleRank home">
+        <img src="assets/pickle-rank-logo.png" alt="PickleRank logo" />
+        <span>PickleRank</span>
+      </a>
+      <nav class="hero-auth" aria-label="Authentication">
+        <a id="hero-login-link" class="hero-login-link" href="#login">Log In</a>
+        <a id="hero-register-link" class="hero-register" href="#register">Register</a>
+      </nav>
+    </header>
+
+    <div class="hero-main">
+      <section class="hero-copy">
+        <p class="hero-kicker">Pickleball ranking system · 01</p>
+        <h1 id="landing-title" class="hero-title">
+          <span class="solid">Own the court.</span>
+          <span class="outline">Climb the ladder.</span>
+        </h1>
+        <p class="hero-description">Track every game. Rank every rally. Turn your next point into a higher place on the ladder.</p>
+        <div class="hero-actions">
+          <a id="hero-start-button" class="hero-cta" href="#login">
+            <span>Let's Start</span>
+            <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+          <span class="hero-sublabel">Build your ladder</span>
+        </div>
+      </section>
+
+      <section class="hero-media-column" aria-label="Pickleball action feature">
+        <figure class="hero-media-frame">
+          <img src="https://images.unsplash.com/photo-1756477558468-b3e485757470?auto=format&amp;fit=crop&amp;w=1400&amp;q=85" alt="Pickleball player mid-swing on an outdoor court, photographed by eedgar ivann on Unsplash" />
+          <figcaption class="hero-media-label">01 / Play the point</figcaption>
+        </figure>
+        <span class="hero-side-note">Ranking system / 2026</span>
+      </section>
+    </div>
+
+    <span class="hero-cross one" aria-hidden="true"></span>
+    <span class="hero-cross two" aria-hidden="true"></span>
+  </section>
+
+  <div id="auth-screen" class="auth-screen hidden">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <img class="brand-logo" src="assets/pickle-rank-logo.png" alt="" aria-hidden="true" />
+        <span>PickleRank</span>
+      </div>
+      <div class="auth-tabs" role="tablist" aria-label="Account access">
+        <button class="auth-tab active" id="login-tab" data-auth="login" type="button" role="tab" aria-selected="true" aria-controls="login-form">Log In</button>
+        <button class="auth-tab" id="register-tab" data-auth="register" type="button" role="tab" aria-selected="false" aria-controls="register-form">Register</button>
+      </div>
+      <form id="login-form" class="auth-form" role="tabpanel" aria-labelledby="login-tab">
+        <div class="field">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" placeholder="Enter your username" autocomplete="username" required maxlength="30" />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required />
+        </div>
+        <div id="login-error" class="auth-error hidden" role="alert"></div>
+        <button type="submit" class="btn btn-primary auth-submit">Log In</button>
+      </form>
+      <form id="register-form" class="auth-form hidden" role="tabpanel" aria-labelledby="register-tab">
+        <div class="field">
+          <label for="register-username">Username</label>
+          <input type="text" id="register-username" placeholder="Choose a username" autocomplete="username" required maxlength="30" />
+        </div>
+        <div class="field">
+          <label for="register-password">Password</label>
+          <input type="password" id="register-password" placeholder="6+ characters" autocomplete="new-password" required minlength="6" />
+        </div>
+        <div class="field">
+          <label for="register-confirm">Confirm password</label>
+          <input type="password" id="register-confirm" placeholder="Repeat your password" autocomplete="new-password" required minlength="6" />
+        </div>
+        <div id="register-error" class="auth-error hidden" role="alert"></div>
+        <button type="submit" class="btn btn-primary auth-submit">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="app-shell" class="hidden">
+    <header class="app-header">
+      <div class="app-header-inner">
+        <h1 class="app-title">
+          <img class="brand-logo small" src="assets/pickle-rank-logo.png" alt="" aria-hidden="true" />
+          <span>PickleRank</span>
+        </h1>
+        <nav class="tabs" id="tabs" role="tablist" aria-label="Ranking workspace">
+          <button class="tab active" id="players-tab" data-tab="players" type="button" role="tab" aria-selected="true" aria-controls="tab-players">Players</button>
+          <button class="tab" id="record-tab" data-tab="record" type="button" role="tab" aria-selected="false" aria-controls="tab-record">Record Game</button>
+          <button class="tab" id="leaderboard-tab" data-tab="leaderboard" type="button" role="tab" aria-selected="false" aria-controls="tab-leaderboard">Leaderboard</button>
+        </nav>
+        <button class="btn-logout" id="btn-logout" type="button">Log out</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="tab-players" class="tab-view active" role="tabpanel" aria-labelledby="players-tab">
+        <div class="view-header">
+          <div class="view-heading">
+            <span class="eyebrow">Roster / Rankings</span>
+            <h2>Players</h2>
+            <p class="section-intro">Keep your local ladder ready for the next match.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-show-add-player" type="button" aria-expanded="false" aria-controls="add-player-form">+ Add Player</button>
+        </div>
+
+        <div id="add-player-form" class="card add-player-card hidden">
+          <div class="card-heading">
+            <span class="eyebrow">Roster tools</span>
+            <h3>Add a player</h3>
+          </div>
+          <form id="player-form">
+            <div class="form-row">
+              <div class="field">
+                <label for="player-name">Player name</label>
+                <input type="text" id="player-name" placeholder="e.g. Riley Chen" required maxlength="40" />
+              </div>
+              <div class="field compact">
+                <label for="player-category">Category</label>
+                <select id="player-category"></select>
+              </div>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+          <div class="category-tools">
+            <div class="field">
+              <label for="new-category">Create a category</label>
+              <input type="text" id="new-category" placeholder="e.g. Sunday league" maxlength="30" />
+            </div>
+            <button type="button" class="btn btn-outline" id="btn-add-category">Add Category</button>
+          </div>
+        </div>
+
+        <div class="toolbar" aria-label="Player filters">
+          <div class="field">
+            <label for="player-search">Search players</label>
+            <input type="text" id="player-search" placeholder="Search by name" />
+          </div>
+          <div class="field">
+            <label for="player-category-filter">Filter category</label>
+            <select id="player-category-filter">
+              <option value="">All categories</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="players-list" class="grid-list"></div>
+      </section>
+
+      <section id="tab-record" class="tab-view" role="tabpanel" aria-labelledby="record-tab">
+        <div class="view-header">
+          <div class="view-heading">
+            <span class="eyebrow">Courtside scoring</span>
+            <h2>Record Game</h2>
+            <p class="section-intro">Log a doubles result while the score is still fresh.</p>
+          </div>
+          <button class="btn btn-outline" id="btn-edit-history" type="button" aria-expanded="true" aria-controls="recent-games">Hide Recent Games</button>
+        </div>
+
+        <div class="card record-card" id="record-form">
+          <div class="card-heading">
+            <span class="eyebrow">Match result</span>
+            <h3>Doubles match <span class="muted-inline">/ 2 vs 2</span></h3>
+          </div>
+          <div class="team-section">
+            <div class="team team-a">
+              <h4>Team 1</h4>
+              <div class="field">
+                <label for="team1-p1">Player 1</label>
+                <select class="team-select" id="team1-p1" required></select>
+              </div>
+              <div class="field">
+                <label for="team1-p2">Player 2</label>
+                <select class="team-select" id="team1-p2" required></select>
+              </div>
+              <label class="score-label" for="team1-score">
+                <span>Score</span>
+                <input type="number" id="team1-score" min="0" max="21" value="0" aria-label="Team 1 score" />
+              </label>
+            </div>
+            <div class="vs" aria-hidden="true">VS</div>
+            <div class="team team-b">
+              <h4>Team 2</h4>
+              <div class="field">
+                <label for="team2-p1">Player 1</label>
+                <select class="team-select" id="team2-p1" required></select>
+              </div>
+              <div class="field">
+                <label for="team2-p2">Player 2</label>
+                <select class="team-select" id="team2-p2" required></select>
+              </div>
+              <label class="score-label" for="team2-score">
+                <span>Score</span>
+                <input type="number" id="team2-score" min="0" max="21" value="0" aria-label="Team 2 score" />
+              </label>
+            </div>
+          </div>
+          <div id="record-error" class="error-msg hidden" role="alert"></div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="btn-save-game" type="button">Save Game</button>
+          </div>
+        </div>
+
+        <div id="recent-games" class="section-block">
+          <h3>Recent Games</h3>
+          <div id="games-list"></div>
+        </div>
+      </section>
+
+      <section id="tab-leaderboard" class="tab-view" role="tabpanel" aria-labelledby="leaderboard-tab">
+        <div class="view-header">
+          <div class="view-heading">
+            <span class="eyebrow">Live ladder</span>
+            <h2>Leaderboard</h2>
+            <p class="section-intro">See who is setting the pace across your categories.</p>
+          </div>
+          <div class="field compact">
+            <label for="leaderboard-filter">Filter category</label>
+            <select id="leaderboard-filter">
+              <option value="">All categories</option>
+            </select>
+          </div>
+        </div>
+        <div id="leaderboard-table"></div>
+      </section>
+    </main>
+
+    <div id="profile-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Player profile">
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close" type="button" aria-label="Close profile">×</button>
+        <div id="profile-content"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
