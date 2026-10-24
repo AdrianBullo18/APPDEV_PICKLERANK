@@ -18,6 +18,7 @@
         <span>PickleRank</span>
       </a>
       <nav class="hero-auth" aria-label="Authentication">
+        <a id="hero-events-link" class="hero-login-link" href="#events">Events</a>
         <a id="hero-login-link" class="hero-login-link" href="#login">Log In</a>
         <a id="hero-register-link" class="hero-register" href="#register">Register</a>
       </nav>
@@ -105,6 +106,7 @@
           <button class="tab active" id="players-tab" data-tab="players" type="button" role="tab" aria-selected="true" aria-controls="tab-players">Players</button>
           <button class="tab" id="record-tab" data-tab="record" type="button" role="tab" aria-selected="false" aria-controls="tab-record">Record Game</button>
           <button class="tab" id="leaderboard-tab" data-tab="leaderboard" type="button" role="tab" aria-selected="false" aria-controls="tab-leaderboard">Leaderboard</button>
+          <button class="tab" id="events-tab" data-tab="events" type="button" role="tab" aria-selected="false" aria-controls="events-screen">Events</button>
         </nav>
         <button class="btn-logout" id="btn-logout" type="button">Log out</button>
       </div>
@@ -252,10 +254,138 @@
     <div id="toast" class="toast hidden" role="status" aria-live="polite" aria-atomic="true"></div>
   </div>
 
+  <div id="events-screen" class="events-screen hidden">
+    <header class="app-header events-header">
+      <div class="app-header-inner">
+        <a class="app-title" id="events-brand" href="#landing-hero" aria-label="PickleRank home">
+          <img class="brand-logo small" src="assets/pickle-rank-logo.png" alt="" aria-hidden="true" />
+          <span>PickleRank</span>
+        </a>
+        <nav class="tabs hidden" id="events-tabs" role="tablist" aria-label="Ranking workspace">
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="players">Players</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="record">Record Game</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="leaderboard">Leaderboard</button>
+          <button class="tab active" type="button" role="tab" aria-selected="true" data-tab="events">Events</button>
+        </nav>
+        <button id="events-logout" class="btn-logout hidden" type="button">Log out</button>
+        <div id="events-guest-actions" class="events-guest-actions">
+          <a id="events-login" class="events-account-link" href="#login">Log In</a>
+          <a id="events-register-account" class="hero-register" href="#register">Register</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="events-content">
+      <section class="events-head" aria-labelledby="events-page-title">
+        <div class="events-head-inner">
+          <div class="events-head-copy">
+            <h1 id="events-page-title" tabindex="-1">Tournaments</h1>
+            <p>Official PickleRankPH events across the Philippines — register for upcoming draws, follow live brackets, and earn PR Rating points.</p>
+          </div>
+          <p id="events-status" class="events-status" aria-live="polite">No events match right now</p>
+        </div>
+      </section>
+
+      <div class="events-body">
+        <form id="events-filters" class="events-filters" role="search" novalidate>
+          <div class="events-field events-field-search">
+            <label class="visually-hidden" for="events-search">Search events</label>
+            <div class="events-search-box">
+              <i class="ti ti-search" aria-hidden="true"></i>
+              <input id="events-search" type="text" placeholder="Search event, venue, club or region" autocomplete="off" />
+            </div>
+          </div>
+          <div class="events-field">
+            <label for="events-region">Region</label>
+            <div class="events-select">
+              <select id="events-region"></select>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="events-field">
+            <label for="events-city">City</label>
+            <div class="events-select">
+              <select id="events-city" disabled></select>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="events-field">
+            <label for="events-format">Format</label>
+            <div class="events-select">
+              <select id="events-format"></select>
+              <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </div>
+          </div>
+          <button id="events-apply" class="events-apply" type="submit">Apply</button>
+        </form>
+
+        <div class="events-tabbar">
+          <div id="events-tablist" class="events-segmented" role="tablist" aria-label="Event timeframe">
+            <button id="events-tab-upcoming" class="events-tab active" type="button" role="tab" data-events-tab="upcoming" aria-selected="true" aria-controls="events-results">Upcoming</button>
+            <button id="events-tab-live" class="events-tab" type="button" role="tab" data-events-tab="live" aria-selected="false" aria-controls="events-results">Live now</button>
+            <button id="events-tab-past" class="events-tab" type="button" role="tab" data-events-tab="past" aria-selected="false" aria-controls="events-results">Past</button>
+          </div>
+          <p class="events-note">Finished events live under <span>Past</span> · sorted by start date, soonest first</p>
+        </div>
+
+        <div id="events-results" class="events-results" role="tabpanel" aria-labelledby="events-tab-upcoming"></div>
+
+        <section class="events-promo" aria-labelledby="events-promo-title">
+          <div class="events-promo-body">
+            <div class="events-promo-copy">
+              <span class="events-promo-badge">Tournament Management</span>
+              <h2 id="events-promo-title">Run &amp; Join Events on PickleRankPH</h2>
+              <p>From club ladders to national qualifiers — <span class="events-promo-em">one platform for registration, brackets, live scoring, and official PR Rating updates.</span> No more spreadsheets, group chats, or manual seeding.</p>
+              <p>PickleRankPH tournament management is built for Philippine clubs and organizers who want a professional player experience: discoverable events, verified results, and rankings that actually move when matches are confirmed.</p>
+              <ul class="events-feature-list">
+                <li>
+                  <h3>Online registration</h3>
+                  <p>Divisions by format, skill bracket, PR Rating range, or national rank — with capacity and entry fees.</p>
+                </li>
+                <li>
+                  <h3>Live brackets &amp; courts</h3>
+                  <p>Single/double elimination, round robin, pool play, and more — with court assignment and match command center.</p>
+                </li>
+                <li>
+                  <h3>Verified results → ratings</h3>
+                  <p>Confirmed scores feed the PickleRanking System so every match can count toward national standings.</p>
+                </li>
+                <li>
+                  <h3>Club-hosted workflows</h3>
+                  <p>Approve entries, manage hosted draws, and run internal leagues alongside open public events.</p>
+                </li>
+              </ul>
+            </div>
+            <aside class="events-aside" aria-labelledby="events-aside-title">
+              <h3 id="events-aside-title" class="events-aside-title">Get on court</h3>
+              <p><span class="events-aside-strong">Players</span> — browse events below, register in seconds, and track your bracket live.</p>
+              <button id="events-join-player" class="events-cta" type="button">Join as a Player</button>
+              <p class="events-aside-label">Organizers &amp; clubs</p>
+              <p>Register your club to create tournaments, manage divisions, and publish events to this calendar.</p>
+              <button id="events-register-club" class="events-secondary" type="button">Register Your Club</button>
+              <p class="events-signin">Already hosting? <button id="events-signin-link" class="events-signin-link" type="button">Sign in <i class="ti ti-arrow-right" aria-hidden="true"></i></button></p>
+            </aside>
+          </div>
+          <div class="events-photo-strip">
+            <img src="https://images.pexels.com/photos/30864598/pexels-photo-30864598.jpeg" alt="Pickleball player serving on an outdoor court — photo by Rodrigo Ortega on Pexels" width="640" height="360" loading="lazy" />
+            <img src="https://images.pexels.com/photos/35248404/pexels-photo-35248404.jpeg" alt="Doubles rally on an indoor pickleball court — photo by Anhelina Vasylyk on Pexels" width="640" height="360" loading="lazy" />
+            <img src="https://images.pexels.com/photos/9716299/pexels-photo-9716299.jpeg" alt="Aerial view of row of pickleball courts — photo by Kindel Media on Pexels" width="640" height="360" loading="lazy" />
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div id="events-dialog-root"></div>
+    <p id="events-announcer" class="visually-hidden" role="status" aria-live="polite"></p>
+    <div id="events-toast" class="toast hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <script src="js/events-data.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/stats.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/events.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

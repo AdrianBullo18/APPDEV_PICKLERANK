@@ -10,6 +10,8 @@
   var currentLeaderboardFilter = '';
   var editingPlayerId = null;
   var showHistory = true;
+  var lastTab = 'players';
+  var pendingAuthReturn = null;
 
   document.addEventListener('DOMContentLoaded', init);
 
@@ -25,6 +27,9 @@
       enterApp(user);
     } else {
       showLanding();
+    }
+    if (window.location.hash === '#events' && window.PBREventsScreen) {
+      window.PBREventsScreen.open({ from: 'landing', returnTab: lastTab });
     }
   }
 
@@ -43,12 +48,76 @@
       e.preventDefault();
       showAuth('register');
     });
+
+    $('hero-events-link').addEventListener('click', function (e) {
+      e.preventDefault();
+      openEventsScreen({ from: 'landing' });
+    });
+  }
+
+  /* ---------- Events screen hand-off ---------- */
+
+  function openEventsScreen(opts) {
+    if (!window.PBREventsScreen) return;
+    window.PBREventsScreen.open(opts || {});
+  }
+
+  function onEventsAuthRequired(e) {
+    var detail = e.detail || {};
+    pendingAuthReturn = detail.returnTo || null;
+    showAuth(detail.mode || 'login');
+  }
+
+  function onEventsExit(e) {
+    var detail = e.detail || {};
+    var user = window.PBRAuth.currentUser();
+    clearEventsHash();
+    if (detail.target === 'landing' || !user) {
+      showLanding();
+      return;
+    }
+    enterApp(user);
+    switchTab(detail.tab || lastTab);
+  }
+
+  function clearEventsHash() {
+    if (window.location.hash !== '#events') return;
+    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+
+  function leaveEventsForTab(name) {
+    if (window.PBREventsScreen) window.PBREventsScreen.close();
+    var user = window.PBRAuth.currentUser();
+    if (!user) {
+      showAuth('login');
+      return;
+    }
+    enterApp(user);
+    switchTab(name);
+  }
+
+  function resumePendingEvents() {
+    if (pendingAuthReturn !== 'events' || !window.PBREventsScreen) return;
+    pendingAuthReturn = null;
+    window.PBREventsScreen.open({ from: 'auth', resume: true });
   }
 
   function wireEvents() {
+    document.addEventListener('pbr:auth-required', onEventsAuthRequired);
+    document.addEventListener('pbr:events-exit', onEventsExit);
+    document.addEventListener('pbr:events-logout', onLogout);
+    window.addEventListener('hashchange', function () {
+      if (window.location.hash === '#events') openEventsScreen({ from: 'landing' });
+    });
+
     document.querySelectorAll('.tab').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        switchTab(btn.getAttribute('data-tab'));
+        var name = btn.getAttribute('data-tab');
+        if (name !== 'events' && window.PBREventsScreen && window.PBREventsScreen.isOpen()) {
+          leaveEventsForTab(name);
+          return;
+        }
+        switchTab(name);
       });
     });
 
@@ -131,12 +200,16 @@
   }
 
   function showLanding() {
+    if (window.PBREventsScreen) window.PBREventsScreen.close();
+    clearEventsHash();
     $('landing-hero').classList.remove('hidden');
     $('auth-screen').classList.add('hidden');
     $('app-shell').classList.add('hidden');
   }
 
   function showAuth(tabName) {
+    if (window.PBREventsScreen) window.PBREventsScreen.close();
+    clearEventsHash();
     $('landing-hero').classList.add('hidden');
     $('auth-screen').classList.remove('hidden');
     $('app-shell').classList.add('hidden');
@@ -147,6 +220,7 @@
   }
 
   function enterApp(username) {
+    if (window.PBREventsScreen) window.PBREventsScreen.close();
     S.setUser(username);
     $('landing-hero').classList.add('hidden');
     $('auth-screen').classList.add('hidden');
@@ -155,6 +229,7 @@
     populateCategoryOptions();
     populateTeamSelects();
     renderAll();
+    if (window.PBREventsScreen) window.PBREventsScreen.refreshSession();
   }
 
   function onLoginSubmit(e) {
@@ -172,6 +247,7 @@
       $('login-form').reset();
       enterApp(res.username);
       UI.toast('Welcome back, ' + res.username + '!');
+      resumePendingEvents();
     });
   }
 
@@ -199,6 +275,7 @@
       $('register-form').reset();
       enterApp(res.username);
       UI.toast('Account created. Welcome, ' + res.username + '!');
+      resumePendingEvents();
     });
   }
 
@@ -206,10 +283,16 @@
     window.PBRAuth.logout();
     S.setUser(null);
     showAuth('login');
+    if (window.PBREventsScreen) window.PBREventsScreen.refreshSession();
     UI.toast('Logged out.');
   }
 
   function switchTab(name) {
+    if (name === 'events') {
+      openEventsScreen({ from: 'app', returnTab: lastTab });
+      return;
+    }
+    lastTab = name;
     document.querySelectorAll('.tab-view').forEach(function (v) {
       v.classList.remove('active');
     });
